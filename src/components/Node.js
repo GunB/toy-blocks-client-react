@@ -45,8 +45,25 @@ const Node = ({ node, expanded, toggleNodeExpanded }) => {
           <Status loading={node.loading} online={node.online} />
         </Box>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        <Typography>Blocks go here</Typography>
+      <ExpansionPanelDetails className={classes.listDisplayer}>
+        {node && node.data
+          ? node.data.map((item) => (
+              <Box key={item.id} className={classes.listItem}>
+                <Typography className={classes.listItem__id}>
+                  {item.id}
+                </Typography>
+                {item.attributes
+                  ? Object.keys(item.attributes).map((data) =>
+                      data === "id" ? null : (
+                        <Typography>
+                          {data}:{item.attributes[data]}
+                        </Typography>
+                      )
+                    )
+                  : "No data available"}
+              </Box>
+            ))
+          : "No data available"}
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );
@@ -95,6 +112,21 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(14),
     color: colors.faded,
     lineHeight: 2,
+  },
+  listItem: {
+    padding: "10px 10px",
+    margin: "5px 0",
+    background: "#CCC",
+    display: "block",
+    fontSize: theme.typography.pxToRem(15),
+  },
+  listItem__id: {
+    fontSize: theme.typography.pxToRem(10),
+    color: "blue",
+    display: "block",
+  },
+  listDisplayer: {
+    flexDirection: "column",
   },
 }));
 
